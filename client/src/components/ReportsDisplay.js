@@ -46,16 +46,24 @@ const ReportsDisplay = () => {
   const fetchPreviousDiagnoses = async () => {
     try {
       setLoading(true);
-      const response = await axios.post('http://localhost:8080/previous-diagnoses', { reportIds: [reportId] });
+      const response = await axios.post('http://localhost:8080/api/previous-diagnoses', { reportIds: [reportId] });
       setPreviousDiagnoses(response.data);
+      if (response.data.length === 0) {
+        setPreviousDiagnoses([{ LLMPrediction: 'No previous diagnoses found. To diagnose, click on Diagnose again.', riskPercent: 'null' }]);
+      }
+      
+      console.log("Previous Diagnoses", response.data);
       setLoading(false);
     } catch (error) {
-      setError(error.message);
+      if (error.response && error.response.status === 500) {
+        setPreviousDiagnoses([{ LLMPrediction: 'No previous diagnoses found. To diagnose, click on Diagnose again.', riskPercent: null }]);
+      } else {
+        setError(error.message);
+      }
       setLoading(false);
       console.error('Error fetching previous diagnoses:', error);
     }
   };
-
   // Fetch report data on component mount or when reportId changes
   useEffect(() => {
     fetchData();

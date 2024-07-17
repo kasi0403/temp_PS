@@ -1,5 +1,5 @@
 const express = require("express");
-const { usersModel, patientIdModel, reportIdsModel, careIDsModel, reportDatasModel } = require("../schemas/allSchemas");
+const { usersModel, patientIdModel, reportIdsModel, careIDsModel, reportDatasModel ,predictionsModel} = require("../schemas/allSchemas");
 const allroutes = express.Router();
 const multer = require("multer");
 const upload = multer();
@@ -63,19 +63,14 @@ allroutes.get('/reportData/:reportId', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-allroutes.get('/previous-diagnoses/:userId/:reportId', async (req, res) => {
-  const { userId, reportId } = req.params;
-
-  if (!userId || !reportId) {
-    return res.status(400).send({ error: 'userId and reportId are required' });
-  }
-
+allroutes.post('/previous-diagnoses', async (req, res) => {
   try {
-    const previousDiagnoses = await predictionsModel.find({ userId, reportIds: reportId });
-    res.send(previousDiagnoses);
+    const { reportIds } = req.body;
+    const diagnoses = await predictionsModel.find({ reportIds: { $in: reportIds } });
+    res.status(200).json(diagnoses);
   } catch (error) {
     console.error('Error fetching previous diagnoses:', error);
-    res.status(500).send({ error: error.message });
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
