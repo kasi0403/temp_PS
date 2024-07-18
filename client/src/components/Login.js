@@ -48,9 +48,9 @@ const Login = ({ setIsLoggedIn }) => {
   );
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 py-6">
+    <div className="min-h-screen flex flex-col items-center py-9">
+      <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
       <div className="w-full max-w-md bg-white p-8 rounded shadow-lg">
-        <h1 className="text-3xl font-extrabold mb-4 text-center">Login</h1>
         <form onSubmit={handleSubmit}>
           {errorLoggingIn && <Error />}
           <div className="mb-4">

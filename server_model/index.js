@@ -309,6 +309,14 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   }
 });
 
+app.post("/save", (req, res) => {
+  const updatedData = req.body;
+  // Handle the logic to save the updated data
+  // For example, you might save it to a database or a file
+  console.log('Received data to save:', updatedData);
+  res.send({ success: true, message: "Data saved successfully" });
+});
+
 
 
 let db = async () => { 

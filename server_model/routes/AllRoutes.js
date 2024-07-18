@@ -26,6 +26,43 @@ allroutes.get('/', (req, res) => {
   res.send("Backend home");
 });
 
+
+allroutes.post("/submit", async (req, res) => {
+  const { userId, date, ...AllData } = req.body;
+  
+  const reportData = AllData;
+  const DocNote = "";
+  const dietPlan = "";
+
+  if (!userId || !date || !AllData) {
+    return res.status(400).send("User ID, date, and report data are required");
+  }
+
+  try {
+    const newReportData = new reportDatasModel({
+      userId,
+      date,
+      reportPdf: reportData,
+      docNote: DocNote,
+      dietPlan: dietPlan,
+    });
+    
+    const savedReportData = await newReportData.save();
+
+    const updatedReportIds = await reportIdsModel.findOneAndUpdate(
+      { userId },
+      { $push: { ALLreportIDs: savedReportData._id } },
+      { upsert: true, new: true }
+    );
+
+    console.log(savedReportData);
+    res.send({ success: true, message: "Data saved successfully", report: savedReportData, reportIds: updatedReportIds });
+  } catch (error) {
+    console.error('Error saving data:', error);
+    res.status(500).send('Internal Server Error: Failed to save data');
+  }
+}); 
+
 // Endpoint to get user IDs
 allroutes.get('/userIds', async (req, res) => {
   try {
@@ -225,44 +262,6 @@ allroutes.post('/login', upload.none(), async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).send(err);
-  }
-});
-
-// Endpoint to save report data
-allroutes.post("/save", async (req, res) => {
-  const { userId, date, ...AllData } = req.body;
-  const reportData = AllData;
-  const DocNote = "";
-  const dietPlan = "";
-
-  if (!userId || !date || !AllData) {
-    return res.status(400).send("User ID, date, and report data are required");
-  }
-
-  try {
-    // Create new reportData object
-    const newReportData = new reportDatasModel({
-      userId,
-      date,
-      reportPdf: reportData,
-      docNote: DocNote,
-      dietPlan: dietPlan,
-    });
-
-    // Save the new reportData object
-    const savedReportData = await newReportData.save();
-
-    // Update reportIdsModel with new reportData object ID
-    const updatedReportIds = await reportIdsModel.findOneAndUpdate(
-      { userId },
-      { $push: { ALLreportIDs: savedReportData._id } },
-      { upsert: true, new: true }
-    );
-
-    res.send({ success: true, message: "Data saved successfully", report: savedReportData, reportIds: updatedReportIds });
-  } catch (error) {
-    console.error('Error saving data:', error);
-    res.status(500).send('Internal Server Error: Failed to save data');
   }
 });
 

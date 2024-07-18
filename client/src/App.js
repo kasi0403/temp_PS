@@ -7,8 +7,7 @@ import Form from './components/Form';
 import Profile from './components/Profile';
 import ChatBot from './components/ChatBot';
 import './App.css';
-import PatientReg from './components/Admin';
-import AddCare from './components/AddCare';
+import Admin from './components/Admin';
 import PatientList from './components/PatientsList';
 import ReportsList from './components/ReportsList';
 import ReportsDisplay from './components/ReportsDisplay';
@@ -43,8 +42,7 @@ const App = () => {
         <Route path='/report/:reportId' element={isLoggedIn && (sessionStorage.getItem('userType') === 'Care Taker' || sessionStorage.getItem('userType') ==='doctor') ? <ReportsDisplay/> : <Home />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/chatbot' element={isLoggedIn && sessionStorage.getItem('userType') === 'doctor' ? <ChatBot /> : <Home />} />
-        <Route path='/patientRegister' element={isLoggedIn && sessionStorage.getItem('userType') === 'admin' ? <PatientReg /> : <Home />} />
-        <Route path='/careRegister' element={isLoggedIn && sessionStorage.getItem('userType') === 'admin' ? <AddCare></AddCare> : <Home />} />
+        <Route path='/Admin' element={isLoggedIn && sessionStorage.getItem('userType') === 'admin' ? <Admin /> : <Home />} />
       </Routes>
     </div>
   );
