@@ -20,6 +20,7 @@ def diagnose():
     try:
         output = ollama.chat(model="cniongolo/biomistral", messages=msgs)
         diagnosis = output['message']['content']
+        print(diagnosis)
         return jsonify({'diagnosis': diagnosis})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
