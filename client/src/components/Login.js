@@ -24,6 +24,7 @@ const Login = ({ setIsLoggedIn }) => {
         setErrorLoggingIn('');
         sessionStorage.setItem('isLoggedIn', 'true');
         sessionStorage.setItem('userType', resp.data.user.userType); // Store userType
+        sessionStorage.setItem('username', resp.data.user.username); // Store username
         setIsLoggedIn(true);
         console.log("Successfully logged in");
         setTimeout(() => {

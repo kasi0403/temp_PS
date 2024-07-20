@@ -11,6 +11,7 @@ import Admin from './components/Admin';
 import PatientList from './components/PatientsList';
 import ReportsList from './components/ReportsList';
 import ReportsDisplay from './components/ReportsDisplay';
+import Chat from './components/Chat';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -26,6 +27,7 @@ const App = () => {
   const handleLogout = () => {
     sessionStorage.removeItem('isLoggedIn');
     sessionStorage.removeItem('userType');
+    sessionStorage.removeItem('username'); // Remove username
     setIsLoggedIn(false);
     navigate('/login');
   };
@@ -43,6 +45,8 @@ const App = () => {
         <Route path='/profile' element={<Profile />} />
         <Route path='/chatbot' element={isLoggedIn && sessionStorage.getItem('userType') === 'doctor' ? <ChatBot /> : <Home />} />
         <Route path='/Admin' element={isLoggedIn && sessionStorage.getItem('userType') === 'admin' ? <Admin /> : <Home />} />
+        <Route path='/chat' element={<Chat />} />
+
       </Routes>
     </div>
   );
