@@ -21,12 +21,26 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 
 dotenv.config();
-
-
 app.use(bodyParser.json());
 app.use(cors());
-
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+
+
+const { handleUserQuery } = require('./chatbotHandler'); // Adjust the path as needed
+const {
+  usersModel,
+  patientIdModel,
+  careIDsModel,
+} = require('./schemas/allSchemas'); 
+
+app.post('/chat', async (req, res) => {
+  const { query } = req.body;
+  const response = await handleUserQuery(query);
+  res.send(response);
+});
+
+
+
 
 
 app.post('/pedict', async (req, res) => {
